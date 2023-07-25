@@ -1002,19 +1002,7 @@ class GtidTests(unittest.TestCase):
             gtid = Gtid("57b70f4e-20d3-11e5-a393-4a63946f7eac:1-:1")
             gtid = Gtid("57b70f4e-20d3-11e5-a393-4a63946f7eac::1")
 
-class TestMariadbBinlogStreaReader(base.PyMySQLReplicationTestCase):
-    def setUp(self):
-        super(TestMariadbBinlogStreaReader,self).setUp()
-        self.stream.close()
-        maria_db = copy.copy(self.database)
-        maria_db["db"] = None
-        maria_db["port"] = 3308
-        self.connect_conn_control(maria_db)
-        self.execute("DROP DATABASE IF EXISTS pymysqlreplication_test")
-        self.execute("CREATE DATABASE pymysqlreplication_test")
-        self.isMariaDB()
-        self.stream = BinLogStreamReader(maria_db, server_id=1024,
-                                         ignored_events=self.ignoredEvents())
+class TestMariadbBinlogStreaReader(base.PyMySQLReplicationMariaDbTestCase):
         
     def test_gtid_list_event(self):
         event = self.stream.fetchone()

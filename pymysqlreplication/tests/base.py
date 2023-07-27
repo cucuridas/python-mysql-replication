@@ -146,7 +146,3 @@ class PyMySQLReplicationMariaDbTestCase(PyMySQLReplicationTestCase):
         self.connect_conn_control(db)
         self.stream = None
         self.resetBinLog()
-
-        
-    
-    

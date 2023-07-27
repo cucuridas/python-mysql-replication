@@ -29,3 +29,4 @@ services:
       --binlog-format=row
       --log-slave-updates=on
       --max_binlog_size=2048
+      

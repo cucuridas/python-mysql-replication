@@ -1024,9 +1024,9 @@ class TestMariadbBinlogStreaReader(base.PyMySQLReplicationMariaDbTestCase):
         self.assertEqual(event.event_type,163)
         self.assertIsInstance(event,MariadbGtidListEvent)
         self.assertEqual(event.gtid_list[0].gtid,"0-1-16")
-
+        event = self.stream.fetchone()
+        self.assertIsNotNone(event)
        
-            
 if __name__ == "__main__":
     import unittest
     unittest.main()

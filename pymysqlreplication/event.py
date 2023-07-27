@@ -112,8 +112,8 @@ class MariadbGtidListEvent(BinLogEvent):
             """
             Information class of elements in GTID list
             """
-            def __init__(self, from_packet, event_size, table_map, ctl_connection, **kwargs):
-                super(MariadbGtidObejct, self).__init__(from_packet, event_size, table_map, ctl_connection, **kwargs)
+            def __init__(self, from_packet):
+                self.packet = from_packet
                 self.domain_id = self.packet.read_uint32()
                 self.server_id = self.packet.read_uint32()
                 self.gtid_seq_no = self.packet.read_uint64()
@@ -121,7 +121,7 @@ class MariadbGtidListEvent(BinLogEvent):
 
 
         self.gtid_length = self.packet.read_uint32()
-        self.gtid_list = [MariadbGtidObejct(from_packet, event_size, table_map, ctl_connection, **kwargs) for i in range(self.gtid_length)]
+        self.gtid_list = [MariadbGtidObejct(self.packet) for i in range(self.gtid_length)]
 
         
     def _dump(self):

@@ -1005,19 +1005,28 @@ class GtidTests(unittest.TestCase):
 class TestMariadbBinlogStreaReader(base.PyMySQLReplicationMariaDbTestCase):
         
     def test_gtid_list_event(self):
-        event = self.stream.fetchone()
-        self.assertEqual(event.position, 4)  
+
+        query = "CREATE TABLE test (id INT NOT NULL AUTO_INCREMENT, data VARCHAR (50) NOT NULL, PRIMARY KEY (id))"
+        self.execute(query)
+        query3 = "INSERT INTO test (data) VALUES('a')"
+        for i in range(0, 20):
+            self.execute(query3)
+            query = "COMMIT;"
+            self.execute(query)
         
-        #FormatDescriptionEvent
+        event = self.stream.fetchone()
+        self.assertEqual(event.event_type,4)
+        # File Description
         event = self.stream.fetchone()
         self.assertEqual(event.event_type,15)
-        self.assertIsInstance(event,FormatDescriptionEvent)
-
-        #MariadbAnnotateRowsEvent
+        # GTID List event
         event = self.stream.fetchone()
         self.assertEqual(event.event_type,163)
         self.assertIsInstance(event,MariadbGtidListEvent)
+        self.assertEqual(event.gtid_list[0].gtid,"0-1-16")
 
+       
+            
 if __name__ == "__main__":
     import unittest
     unittest.main()
